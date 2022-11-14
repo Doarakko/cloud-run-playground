@@ -8,10 +8,50 @@ terraform {
 }
 
 provider "google" {
-  project = "cloud-run-playground-368419"
+  project = var.project_id
   region  = "us-central1"
   zone    = "us-central1-c"
+}
 
+resource "google_service_account" "github-actions" {
+  project      = var.project_id
+  account_id   = "github-actions"
+  display_name = "A service account for GitHub Actions"
+}
+
+resource "google_iam_workload_identity_pool" "github-actions" {
+  provider                  = google-beta
+  project                   = var.project_id
+  workload_identity_pool_id = "gh-oidc-pool"
+  display_name              = "gh-oidc-pool"
+  description               = "Workload Identity Pool for GitHub Actions"
+}
+
+resource "google_project_service" "project" {
+  project = var.project_id
+  service = "iamcredentials.googleapis.com"
+}
+
+resource "google_iam_workload_identity_pool_provider" "github-actions" {
+  provider                           = google-beta
+  project                            = var.project_id
+  workload_identity_pool_id          = google_iam_workload_identity_pool.github-actions.workload_identity_pool_id
+  workload_identity_pool_provider_id = "github-actions"
+  display_name                       = "github-actions"
+  description                        = "OIDC identity pool provider for GitHub Actions"
+  attribute_mapping = {
+    "google.subject"       = "assertion.sub"
+    "attribute.repository" = "assertion.repository"
+  }
+  oidc {
+    issuer_uri = "https://token.actions.githubusercontent.com"
+  }
+}
+
+resource "google_service_account_iam_member" "admin-account-iam" {
+  service_account_id = google_service_account.github-actions.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${var.repo_name}"
 }
 
 resource "google_cloud_run_service" "default" {
@@ -22,6 +62,11 @@ resource "google_cloud_run_service" "default" {
     spec {
       containers {
         image = "us-docker.pkg.dev/cloudrun/container/hello"
+        resources {
+          limits = {
+            "memory" = "128Mi"
+          }
+        }
       }
     }
   }
