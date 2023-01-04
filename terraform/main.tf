@@ -55,6 +55,12 @@ resource "google_service_account_iam_member" "admin-account-iam" {
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${var.repo_name}"
 }
 
+resource "google_project_iam_member" "admin-account-iam" {
+  project = var.project_id
+  role    = "roles/artifactregistry.admin"
+  member  = "serviceAccount:${google_service_account.github-actions.email}"
+}
+
 resource "google_cloud_run_service" "default" {
   name     = "cloudrun-srv"
   location = "us-central1"
@@ -80,7 +86,7 @@ resource "google_cloud_run_service" "default" {
 }
 
 resource "google_artifact_registry_repository" "default" {
-  location = "asia-northeast1"
+  location      = "asia-northeast1"
   repository_id = "playground"
-  format = "DOCKER"
+  format        = "DOCKER"
 }
