@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    working-directory: ./app
+
 permissions:
   contents: 'read'
   id-token: 'write'
@@ -28,7 +32,6 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
       - name: Build and push
-        working-directory: ./app
         uses: docker/build-push-action@v3
         with:
           push: true
