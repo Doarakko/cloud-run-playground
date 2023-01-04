@@ -11,4 +11,4 @@ RUN poetry config virtualenvs.create false
 RUN poetry install
 RUN rm -rf ~/.cache
 
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}" ]
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080" ]
