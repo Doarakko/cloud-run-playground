@@ -9,8 +9,8 @@ terraform {
 
 provider "google" {
   project = var.project_id
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  region  = "asia-northeast1"
+  zone    = "asia-northeast1-a"
 }
 
 resource "google_service_account" "github-actions" {
