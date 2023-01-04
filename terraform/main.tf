@@ -63,7 +63,7 @@ resource "google_project_iam_member" "admin-account-iam" {
 
 resource "google_cloud_run_service" "default" {
   name     = "cloudrun-srv"
-  location = "us-central1"
+  location = "asia-northeast1"
 
   template {
     spec {
