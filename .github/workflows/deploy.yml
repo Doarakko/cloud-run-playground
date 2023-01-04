@@ -18,6 +18,7 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
+          token_format: 'access_token'
           workload_identity_provider: 'projects/504916774323/locations/global/workloadIdentityPools/gh-oidc-pool/providers/github-actions'
           service_account: 'github-actions@cloud-run-playground-368419.iam.gserviceaccount.com'
       - name: Login to Artifact Registry
