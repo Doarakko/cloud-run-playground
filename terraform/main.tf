@@ -28,8 +28,9 @@ resource "google_iam_workload_identity_pool" "github-actions" {
 }
 
 resource "google_project_service" "project" {
-  project = var.project_id
-  service = "iamcredentials.googleapis.com"
+  project  = var.project_id
+  for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com"])
+  service  = each.key
 }
 
 resource "google_iam_workload_identity_pool_provider" "github-actions" {
@@ -77,5 +78,3 @@ resource "google_cloud_run_service" "default" {
   }
 
 }
-
-
