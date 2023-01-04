@@ -35,3 +35,8 @@ jobs:
           context: "{{defaultContext}}:app"
           push: true
           tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-368419/playground/fastapi:latest
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: 'cloudrun-srv'
+          image: 'asia-northeast1-docker.pkg.dev/cloud-run-playground-368419/playground/fastapi'
