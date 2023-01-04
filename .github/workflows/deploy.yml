@@ -10,22 +10,24 @@ permissions:
   id-token: 'write'
 
 jobs:
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v0'
-      with:
-        workload_identity_provider: 'projects/504916774323/locations/global/workloadIdentityPools/gh-oidc-pool/providers/github-actions'
-        service_account: 'github-actions@cloud-run-playground-368419.iam.gserviceaccount.com'
-    - name: Login to Artifact Registry
-      uses: docker/login-action@v1
-      with:
-        registry: us-west2-docker.pkg.dev
-        username: oauth2accesstoken
-        password: ${{ steps.auth.outputs.access_token }}
-    - name: Build and push
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-368419/playground/fastapi:latest
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/504916774323/locations/global/workloadIdentityPools/gh-oidc-pool/providers/github-actions'
+          service_account: 'github-actions@cloud-run-playground-368419.iam.gserviceaccount.com'
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: us-west2-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-368419/playground/fastapi:latest
