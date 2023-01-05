@@ -16,7 +16,7 @@ provider "google" {
 resource "google_project_service" "project" {
   project  = var.project_id
   for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com", "run.googleapis.com"])
-  service  = each.key
+  service  = each.value
 }
 
 resource "google_service_account" "github-actions" {
@@ -58,7 +58,7 @@ resource "google_service_account_iam_member" "admin-account-iam" {
 resource "google_project_iam_member" "admin-account-iam" {
   project  = var.project_id
   for_each = toset(["roles/iam.serviceAccountUser", "roles/artifactregistry.admin", "roles/run.developer"])
-  role     = each.key
+  role     = each.value
   member   = "serviceAccount:${google_service_account.github-actions.email}"
 }
 
