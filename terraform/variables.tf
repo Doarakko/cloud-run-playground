@@ -1,5 +1,5 @@
 variable "project_id" {
-  default = "cloud-run-playground-368419"
+  default = "cloud-run-playground-373811"
 }
 
 variable "repo_name" {

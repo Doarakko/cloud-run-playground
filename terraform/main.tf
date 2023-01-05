@@ -13,6 +13,12 @@ provider "google" {
   zone    = "asia-northeast1-a"
 }
 
+resource "google_project_service" "project" {
+  project  = var.project_id
+  for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com", "run.googleapis.com"])
+  service  = each.key
+}
+
 resource "google_service_account" "github-actions" {
   project      = var.project_id
   account_id   = "github-actions"
@@ -27,18 +33,12 @@ resource "google_iam_workload_identity_pool" "github-actions" {
   description               = "Workload Identity Pool for GitHub Actions"
 }
 
-resource "google_project_service" "project" {
-  project  = var.project_id
-  for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com"])
-  service  = each.key
-}
-
 resource "google_iam_workload_identity_pool_provider" "github-actions" {
   provider                           = google-beta
   project                            = var.project_id
   workload_identity_pool_id          = google_iam_workload_identity_pool.github-actions.workload_identity_pool_id
-  workload_identity_pool_provider_id = "github-actions"
-  display_name                       = "github-actions"
+  workload_identity_pool_provider_id = "gh-oidc-provider"
+  display_name                       = "gh-oidc-provider"
   description                        = "OIDC identity pool provider for GitHub Actions"
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
@@ -56,10 +56,10 @@ resource "google_service_account_iam_member" "admin-account-iam" {
 }
 
 resource "google_project_iam_member" "admin-account-iam" {
-  project = var.project_id
+  project  = var.project_id
   for_each = toset(["roles/iam.serviceAccountUser", "roles/artifactregistry.admin", "roles/run.developer"])
-  role    = each.key
-  member  = "serviceAccount:${google_service_account.github-actions.email}"
+  role     = each.key
+  member   = "serviceAccount:${google_service_account.github-actions.email}"
 }
 
 resource "google_cloud_run_service" "default" {
@@ -83,7 +83,15 @@ resource "google_cloud_run_service" "default" {
     percent         = 100
     latest_revision = true
   }
+}
 
+resource "google_cloud_run_service_iam_binding" "default" {
+  location = google_cloud_run_service.default.location
+  service  = google_cloud_run_service.default.name
+  role     = "roles/run.invoker"
+  members = [
+    "allUsers"
+  ]
 }
 
 resource "google_artifact_registry_repository" "default" {
