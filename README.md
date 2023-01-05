@@ -1,5 +1,8 @@
 # Cloud Run Playground
 
+Deploy original Docker image to Cloud Run using Terraform and GitHub Actions.
+It uses Workload Identity for authentication with Github Actions.
+
 ## Requirements
 
 - Google Cloud account
@@ -75,6 +78,8 @@ google_workload_identity_provider = "<Google workload identity provider>"
 ### 7. Commit and push to your repository
 
 ### 8. Go
+
+![](./example.png)
 
 ## References
 
