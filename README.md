@@ -36,6 +36,7 @@ gcloud auth application-default login
 ### 5. Get `service_account` and `workload_identity_provider`
 
 ```sh
+cd terraform
 terraform apply
 ```
 
