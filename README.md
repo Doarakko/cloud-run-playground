@@ -23,7 +23,7 @@ variable "project_id" {
 }
 
 variable "repo_name" {
-  default = "GitHub reposisotry name"
+  default = "<GitHub reposisotry name>"
 }
 ```
 
@@ -71,7 +71,7 @@ google_workload_identity_provider = "<Google workload identity provider>"
         with:
           region: 'asia-northeast1'
           service: 'cloudrun-srv'
-          image: 'asia-northeast1-docker.pkg.dev/<<Google Cloud project id>>/playground/fastapi'
+          image: 'asia-northeast1-docker.pkg.dev/<Google Cloud project id>/playground/fastapi'
 
 ```
 
