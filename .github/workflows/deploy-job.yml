@@ -41,7 +41,6 @@ jobs:
           tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-373814/playground/hello-world:latest
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1.1.0'
-        run : 
       - name: deploy job
         run: > 
           gcloud components install beta
