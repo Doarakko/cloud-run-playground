@@ -1,5 +1,5 @@
 resource "google_cloud_run_v2_job" "default" {
-  name         = "cloudrun-job"
+  name         = "hello-world"
   location     = "asia-northeast1"
   launch_stage = "BETA"
 
