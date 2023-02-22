@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "4.43.0"
+      version = "4.53.1"
     }
   }
 }
@@ -83,6 +83,8 @@ resource "google_cloud_run_service" "default" {
     percent         = 100
     latest_revision = true
   }
+
+  autogenerate_revision_name = true
 }
 
 resource "google_cloud_run_service_iam_binding" "default" {
