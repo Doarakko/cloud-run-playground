@@ -39,7 +39,7 @@ jobs:
           context: "{{defaultContext}}:jobs/hello-world"
           push: true
           tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-373814/playground/hello-world:latest
-      - id: deploy job
+      - id: deploy-job
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           region: 'asia-northeast1'
