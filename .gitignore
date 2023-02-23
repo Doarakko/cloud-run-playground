@@ -3,7 +3,8 @@ __pycache__
 
 .terraform
 terraform.log
+terraform.tfstate
+terraform.tfstate.backup
 
 .vscode
-
 .env
