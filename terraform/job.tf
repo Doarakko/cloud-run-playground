@@ -8,7 +8,7 @@ resource "google_cloud_run_v2_job" "default" {
       volumes {
         name = "a-volume"
         secret {
-          secret       = google_secret_manager_secret.secret.secret_id
+          secret       = google_secret_manager_secret.name.secret_id
           default_mode = 292
           items {
             version = "1"
@@ -24,7 +24,7 @@ resource "google_cloud_run_v2_job" "default" {
           mount_path = "/secrets"
         }
         env {
-          name = "PROJECT_ID"
+          name  = "PROJECT_ID"
           value = var.project_id
         }
       }
@@ -32,7 +32,7 @@ resource "google_cloud_run_v2_job" "default" {
   }
 }
 
-resource "google_secret_manager_secret" "secret" {
+resource "google_secret_manager_secret" "name" {
   secret_id = "name"
 
   replication {
@@ -41,13 +41,13 @@ resource "google_secret_manager_secret" "secret" {
 }
 
 resource "google_secret_manager_secret_version" "secret-version-data" {
-  secret      = google_secret_manager_secret.secret.name
+  secret      = google_secret_manager_secret.name.name
   secret_data = "please enter in console"
 }
 
 resource "google_secret_manager_secret_iam_member" "secret-access" {
-  secret_id  = google_secret_manager_secret.secret.id
+  secret_id  = google_secret_manager_secret.name.id
   role       = "roles/secretmanager.secretAccessor"
   member     = "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com"
-  depends_on = [google_secret_manager_secret.secret]
+  depends_on = [google_secret_manager_secret.name]
 }
