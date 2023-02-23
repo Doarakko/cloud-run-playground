@@ -1,4 +1,13 @@
 terraform {
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "Doarakko"
+
+    workspaces {
+      name = "cloud-run-playground"
+    }
+  }
+
   required_providers {
     google = {
       source  = "hashicorp/google"
