@@ -8,7 +8,7 @@ WORKDIR /app
 RUN pip install -U pip
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN poetry install --no-root
 RUN rm -rf ~/.cache
 
 CMD [ "python", "main.py"]
