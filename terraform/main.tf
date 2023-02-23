@@ -9,13 +9,13 @@ terraform {
 
 provider "google" {
   project = var.project_id
-  region  = "asia-northeast1"
+  region  = var.region
   zone    = "asia-northeast1-a"
 }
 
 resource "google_project_service" "project" {
   project  = var.project_id
-  for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com", "run.googleapis.com"])
+  for_each = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com", "run.googleapis.com", "secretmanager.googleapis.com"])
   service  = each.value
 }
 
@@ -64,7 +64,7 @@ resource "google_project_iam_member" "admin-account-iam" {
 
 resource "google_cloud_run_service" "default" {
   name     = "cloudrun-srv"
-  location = "asia-northeast1"
+  location = var.region
 
   template {
     spec {
@@ -97,7 +97,7 @@ resource "google_cloud_run_service_iam_binding" "default" {
 }
 
 resource "google_artifact_registry_repository" "default" {
-  location      = "asia-northeast1"
+  location      = var.region
   repository_id = "playground"
   format        = "DOCKER"
 }
