@@ -51,3 +51,24 @@ resource "google_secret_manager_secret_iam_member" "secret-access" {
   member     = "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com"
   depends_on = [google_secret_manager_secret.name]
 }
+
+resource "google_cloud_scheduler_job" "job" {
+  name             = "hello-world-job"
+  schedule         = "50 * * * *"
+  time_zone        = "Asia/Tokyo"
+  attempt_deadline = "15s"
+  region           = var.region
+
+  retry_config {
+    retry_count = 0
+  }
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://${var.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project_id}/jobs/hello-world:run"
+
+    oauth_token {
+      service_account_email = "${var.project_number}-compute@developer.gserviceaccount.com"
+    }
+  }
+}
