@@ -23,13 +23,18 @@ resource "google_cloud_run_v2_job" "default" {
           name       = "a-volume"
           mount_path = "/secrets"
         }
+        env {
+          name = "PROJECT_ID"
+          value = var.project_id
+        }
       }
     }
   }
 }
 
 resource "google_secret_manager_secret" "secret" {
-  secret_id = "secret"
+  secret_id = "name"
+
   replication {
     automatic = true
   }
@@ -37,7 +42,7 @@ resource "google_secret_manager_secret" "secret" {
 
 resource "google_secret_manager_secret_version" "secret-version-data" {
   secret      = google_secret_manager_secret.secret.name
-  secret_data = "secret-data"
+  secret_data = "please enter in console"
 }
 
 resource "google_secret_manager_secret_iam_member" "secret-access" {
