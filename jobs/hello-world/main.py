@@ -1,4 +1,4 @@
 import os
 
-name = os.getenv("name")
+name = os.getenv("secret")
 print(f"Hello {name}!")
