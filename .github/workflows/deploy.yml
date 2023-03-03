@@ -43,5 +43,5 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           region: 'asia-northeast1'
-          service: 'cloudrun-srv'
+          service: 'fastapi'
           image: 'asia-northeast1-docker.pkg.dev/cloud-run-playground-373814/playground/fastapi'

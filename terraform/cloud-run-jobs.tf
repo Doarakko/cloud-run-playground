@@ -1,6 +1,6 @@
 resource "google_cloud_run_v2_job" "default" {
   name         = "hello-world"
-  location     = var.region
+  location     = var.gcp_region
   launch_stage = "BETA"
 
   template {
@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_job" "default" {
         }
         env {
           name  = "PROJECT_ID"
-          value = var.project_id
+          value = var.gcp_project_id
         }
       }
     }
@@ -40,24 +40,24 @@ resource "google_secret_manager_secret" "name" {
   }
 }
 
-resource "google_secret_manager_secret_version" "secret-version-data" {
+resource "google_secret_manager_secret_version" "default" {
   secret      = google_secret_manager_secret.name.name
   secret_data = "please enter in console"
 }
 
-resource "google_secret_manager_secret_iam_member" "secret-access" {
+resource "google_secret_manager_secret_iam_member" "default" {
   secret_id  = google_secret_manager_secret.name.id
   role       = "roles/secretmanager.secretAccessor"
-  member     = "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
   depends_on = [google_secret_manager_secret.name]
 }
 
-resource "google_cloud_scheduler_job" "job" {
+resource "google_cloud_scheduler_job" "default" {
   name             = "hello-world-job"
   schedule         = "50 * * * *"
   time_zone        = "Asia/Tokyo"
   attempt_deadline = "15s"
-  region           = var.region
+  region           = var.gcp_region
 
   retry_config {
     retry_count = 0
@@ -65,10 +65,10 @@ resource "google_cloud_scheduler_job" "job" {
 
   http_target {
     http_method = "POST"
-    uri         = "https://${var.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.project_id}/jobs/hello-world:run"
+    uri         = "https://${var.gcp_region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${var.gcp_project_id}/jobs/hello-world:run"
 
     oauth_token {
-      service_account_email = "${var.project_number}-compute@developer.gserviceaccount.com"
+      service_account_email = "${data.google_project.project.number}-compute@developer.gserviceaccount.com"
     }
   }
 }
