@@ -3,12 +3,12 @@ provider "tfe" {
 }
 
 data "tfe_organization" "organization" {
-  name=var.tfc_organization_name
+  name = var.tfc_organization_name
 }
 
 data "tfe_workspace" "workspace" {
   organization = data.tfe_organization.organization.name
-  name = var.tfc_workspace_name
+  name         = var.tfc_workspace_name
 }
 
 resource "tfe_variable" "enable_gcp_provider_auth" {

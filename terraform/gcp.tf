@@ -38,7 +38,8 @@ resource "google_project_service" "project" {
     "secretmanager.googleapis.com",
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "sts.googleapis.com"
+    "sts.googleapis.com",
+    "cloudscheduler.googleapis.com",
   ])
   service = each.value
 }
