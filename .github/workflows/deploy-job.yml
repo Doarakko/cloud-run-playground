@@ -38,10 +38,10 @@ jobs:
         with:
           context: "{{defaultContext}}:jobs/hello-world"
           push: true
-          tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-373814/playground/hello-world:latest
+          tags: asia-northeast1-docker.pkg.dev/cloud-run-playground-379503/playground/hello-world:latest
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1.1.0'
       - name: deploy job
         run: |
           gcloud components install beta
-          gcloud beta run jobs deploy hello-world --image asia-northeast1-docker.pkg.dev/cloud-run-playground-373814/playground/hello-world --region asia-northeast1
+          gcloud beta run jobs deploy hello-world --image asia-northeast1-docker.pkg.dev/cloud-run-playground-379503/playground/hello-world --region asia-northeast1
