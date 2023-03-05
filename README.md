@@ -100,3 +100,4 @@ Get outputs from `https://app.terraform.io/app/<organization name>/workspaces/<w
 - [Cloud Run revision already exists](https://github.com/hashicorp/terraform-provider-google/issues/5898)
 - [Bootstrapping trust between a TFC workspace and GCP](https://github.com/hashicorp/terraform-dynamic-credentials-setup-examples/tree/main/gcp)
 - [Dynamic Credentials with the GCP Provider](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/gcp-configuration)
+- [garbetjie/terraform-google-cloud-run](https://github.com/garbetjie/terraform-google-cloud-run)
